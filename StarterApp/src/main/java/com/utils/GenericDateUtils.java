@@ -17,6 +17,7 @@ import java.util.Date;
 public class GenericDateUtils {
 
     public static String format="yyyy-MM-dd";
+    public static  String instantFormat="yyyy-MM-dd'T'HH:mm:ss'Z'";
 
 
 

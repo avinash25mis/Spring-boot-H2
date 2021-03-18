@@ -12,6 +12,8 @@ public interface GenericEntity extends Serializable {
 
     public void setId(Long id) ;
 
+    public String toStringForLogger() ;
+
 
 
 }

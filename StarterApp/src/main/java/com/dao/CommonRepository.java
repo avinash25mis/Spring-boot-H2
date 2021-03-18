@@ -1,6 +1,7 @@
 package com.dao;
 
 
+import com.dto.request.UpdateRequest;
 import com.model.common.GenericEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,45 @@ public class CommonRepository {
     public <T extends GenericEntity> T findById(Class<T> entity, Long id){
         return em.find(entity,id);
 
+    }
+
+
+
+    public List getLastRecords(String className, int n) {
+        String from = "FROM ";
+        String orderBy = " order by id DESC";
+        String queryString = from + className + orderBy;
+        Query query = em.createQuery(queryString);
+        query.setMaxResults(n);
+        return query.getResultList();
+
+    }
+
+    public List getRecordWithId(String className, Long id) {
+        String from = "FROM ";
+        String orderBy = " WHERE  id =:id";
+        String queryString = from + className + orderBy;
+        Query query = em.createQuery(queryString);
+        query.setParameter("id", id);
+        return query.getResultList();
+
+    }
+
+    public List executeSelect(String queryString, Object... param) {
+        logger.info(queryString);
+        Query query = em.createQuery(queryString);
+        for (int i = 0; i < param.length; i++) {
+            query.setParameter("param" + (i + 1), param[i]);
+        }
+        return query.getResultList();
+    }
+
+
+    public int runNativeQuery(UpdateRequest request) {
+        String queryString = "UPDATE " + request.getClassName() + " SET " + request.getField() + "=" + request.getFieldValue() + " WHERE " + request.getClause() + " = " + request.getClauseValue();
+        Query query = em.createNativeQuery(queryString);
+        int rowAffected = query.executeUpdate();
+        return rowAffected;
     }
 
 

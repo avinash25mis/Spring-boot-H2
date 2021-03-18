@@ -101,4 +101,16 @@ public class AppUser implements GenericEntity {
                 ", gender='" + gender + '\'' +
                 '}';
     }
+
+    public String toStringForLogger() {
+        return "AppUser{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender='" + gender + '\'' +
+                '}';
+    }
 }
