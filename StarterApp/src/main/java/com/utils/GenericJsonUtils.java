@@ -2,10 +2,10 @@ package com.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.io.Resource;
+
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang.StringUtils;
+
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,6 +23,7 @@ public class GenericJsonUtils {
             if (MapUtils.isNotEmpty(map)) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 json = objectMapper.writeValueAsString(map);
+
             }
         } catch (JsonProcessingException e) {
             e.printStackTrace();

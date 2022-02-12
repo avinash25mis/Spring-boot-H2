@@ -44,7 +44,7 @@ public class TestController {
 
         DateValidator byId = commonRepository.findById(DateValidator.class, id);
         if (byId!=null){
-            AppLogger.RECHARGE_SCHEDULER.info(byId.toStringForLogger());
+            AppLogger.APPLICATION_LOGGER.info(byId.toStringForLogger());
         }
 
         return byId;
@@ -115,7 +115,7 @@ public class TestController {
     public List instanceCase(DateValidatorRequest request){
         Instant instant1 = Instant.parse(request.getFromDate());
         Instant instant2 = Instant.parse(request.getToDate());
-        AppLogger.RECHARGE_SCHEDULER.info("instant "+instant1+": AND :" +instant2);
+        AppLogger.APPLICATION_LOGGER.info("instant "+instant1+": AND :" +instant2);
         String queryString="FROM DateValidator WHERE instant>=:param1 AND instant<=:param2";
         List list = commonRepository.executeSelect(queryString, instant1,instant2);
         System.out.println();
@@ -127,7 +127,7 @@ public class TestController {
         SimpleDateFormat format = new SimpleDateFormat(GenericDateUtils.instantFormat);
         Date date1 = format.parse(request.getFromDate());
         Date date2 = format.parse(request.getToDate());
-        AppLogger.RECHARGE_SCHEDULER.info("util "+date1+": AND :" +date2);
+        AppLogger.APPLICATION_LOGGER.info("util "+date1+": AND :" +date2);
         String queryString="FROM DateValidator WHERE util>=:param1 AND util<=:param2";
         List list = commonRepository.executeSelect(queryString,date1,date2);
         System.out.println();
@@ -138,7 +138,7 @@ public class TestController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(GenericDateUtils.instantFormat);
         LocalDateTime ldt1 = LocalDateTime.parse(request.getFromDate(), formatter);
         LocalDateTime ldt2 = LocalDateTime.parse(request.getToDate(), formatter);
-        AppLogger.RECHARGE_SCHEDULER.info("local "+ldt1+": AND :" +ldt2);
+        AppLogger.APPLICATION_LOGGER.info("local "+ldt1+": AND :" +ldt2);
         String queryString="FROM DateValidator WHERE local>=:param1 AND local<=:param2";
         List list = commonRepository.executeSelect(queryString, ldt1,ldt2);
         System.out.println();
