@@ -1,4 +1,4 @@
-package avi;
+package avi.controller;
 
 
 
@@ -28,18 +28,17 @@ private CommonService commonService;
 
 
 
-    @GetMapping("/home")
-    public String home(HttpRequest httpRequest)
+    @RequestMapping("/test")
+    public String test() throws InterruptedException
     {
-
+      Thread.sleep(6000);
         return "home";
     }
 
-    @GetMapping("/home2")
-    public String home()
-    {
-
-        return "home";
+    @RequestMapping("/home")
+    public String home() throws InterruptedException {
+      //Thread.sleep(6000);
+        return "home2";
     }
 
 
