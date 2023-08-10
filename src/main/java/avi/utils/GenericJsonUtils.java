@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang.StringUtils;
+import org.springframework.util.StringUtils;
 
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class GenericJsonUtils {
     public static Map  getDeserisledMap(String json){
         Map<String,String> map=new HashMap<>();
         try{
-            if(StringUtils.isNotEmpty(json)) {
+            if(StringUtils.isEmpty(json)) {
                 ObjectMapper obj = new ObjectMapper();
                 map = obj.readValue(json, Map.class);
                 System.out.println();

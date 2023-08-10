@@ -1,6 +1,8 @@
+/*
 package avi.utils;
 
-import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang.time.DateUtils;
+import org.thymeleaf.util.DateUtils;
 
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -11,9 +13,11 @@ import java.time.temporal.ChronoField;
 import java.util.Calendar;
 import java.util.Date;
 
+*/
 /**
  * @author avinash.a.mishra
- */
+ *//*
+
 public class GenericDateUtils {
 
     public static String format="yyyy-MM-dd";
@@ -60,9 +64,11 @@ public class GenericDateUtils {
         return startingPoint;
     }
 
-    /*
+    */
+/*
     * Asumming
-    * */
+    * *//*
+
      public static Date getEod(Date date) throws ParseException {
          Date startingPoint = getStartingPonitOfTheDay(date);
          Date dayPlusOne = DateUtils.addDays(startingPoint, 1);
@@ -116,3 +122,4 @@ public class GenericDateUtils {
     }
 
 }
+*/
