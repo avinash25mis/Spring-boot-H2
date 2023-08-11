@@ -22,9 +22,9 @@ public class ExecutorConfig {
    2.or if fewer than maxPoolSize threads are running
 
 * */
+    private int threadPoolSize=12;
     @Bean("fixedThreadPool")
     public ExecutorService fixedThreadPool() {
-        Integer threadPoolSize = 5;
         return new ThreadPoolExecutor(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
     }
 }

@@ -23,16 +23,15 @@ import java.util.Map;
 
 @Component
 public class AppHttpClient {
-
     Logger logger = LoggerFactory.getLogger(AppHttpClient.class);
-    protected HttpClient httpClient;
-
-
+    private HttpClient httpClient;
+    private int connectTimeout=9000;
+    private int connectionRequestTimeout=9000;
 
     @PostConstruct
     public void getHttpClient(){
         HttpClient.Builder httpClientBuilder = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofMillis(5000));
+                .connectTimeout(Duration.ofMillis(connectTimeout));
         httpClientBuilder.version(HttpClient.Version.HTTP_2);
         httpClientBuilder.cookieHandler(new CookieManager(null, CookiePolicy.ACCEPT_NONE));
         httpClient = httpClientBuilder.build();
@@ -40,25 +39,20 @@ public class AppHttpClient {
 
 
 
-
-
-
-
-
-    public AppResponse makeGetCall(String targetUrl, Map<String, String> headers)  {
-        logger.error("calling targetUrl: "+targetUrl);
+    public AppResponse makeGetCall(String targetUrl, Map<String, String> headers,int callCount)  {
+        logger.error("calling targetUrl: "+callCount+"."+targetUrl);
         AppResponse appResponse = null;
         try {
             HttpRequest.Builder httpRequestBuilder = HttpRequest.newBuilder().GET().uri(URI.create(targetUrl.trim()))
-                    .timeout(Duration.ofMillis(5000));
+                    .timeout(Duration.ofMillis(connectionRequestTimeout));
             if (MapUtils.isNotEmpty(headers)) {
                 headers.forEach(httpRequestBuilder::setHeader);
             }
             HttpRequest httpRequest = httpRequestBuilder.build();
             HttpResponse<String> response = sendRequest(httpRequest);
-            appResponse = new AppResponse(response.statusCode(),targetUrl,null, response.body());
+            appResponse = new AppResponse(response.statusCode(),callCount+"."+targetUrl,null, response.body());
         }catch (Exception e){
-           appResponse = new AppResponse(500,targetUrl,"exception", e.getMessage());
+           appResponse = new AppResponse(500,callCount+"."+targetUrl,"exception", e.getMessage());
         }
         return appResponse;
     }

@@ -32,7 +32,7 @@ public class AppService {
             Future<AppResponse> execute = tService.executeCallable(() ->
              {  AppResponse done = null;
                 try {
-                    done =  callOnce(url);
+                    done =  callMultiple(url);
                 } catch (Exception e) {
                    done = new AppResponse<>(AppConstants.CATCH_BLOCK_EXCEPTION,"Callable Task",e.getMessage());
                 }
@@ -40,31 +40,33 @@ public class AppService {
 
             futureTaskList.add(execute);
         }
-
         List<AppResponse> allDone = tService.isAllDone(futureTaskList);
         return allDone;
 
     }
 
 
-
     public AppResponse callOnce(String targetUrl){
-
-        AppResponse appResponse = appHttpClient.makeGetCall(targetUrl, null);
-
+        AppResponse appResponse = appHttpClient.makeGetCall(targetUrl, null,1);
         return appResponse;
     }
 
-    public AppResponse callTillSuccessful(String targetUrl){
-
-        while (appHttpClient.makeGetCall(targetUrl, null).getStatusCode() != 200){
-            try {
+    public AppResponse callMultiple(String targetUrl) throws InterruptedException {
+       int totalCalls = 0;
+       boolean gotSuccess = false;
+        for(int i=1;i<4;i++){
+            AppResponse appResponse = appHttpClient.makeGetCall(targetUrl, null,i);
+            totalCalls = i;
+            if(appResponse.getStatusCode() == 200) {
+                gotSuccess =false;
+                 break;
+             }else {
                 Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+             }
         }
-        return new AppResponse(200, "success");
+        return new AppResponse(200,"totall Calls ="+totalCalls, targetUrl,"success="+gotSuccess);
+        }
+
     }
 
 
@@ -72,4 +74,4 @@ public class AppService {
 
 
 
-}
+

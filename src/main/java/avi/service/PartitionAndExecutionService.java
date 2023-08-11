@@ -1,7 +1,7 @@
 package avi.service;
 
 
-import avi.ExceptionHandling.GlobalExceptionHandler;
+;
 import avi.dto.response.AppResponse;
 import org.apache.commons.collections4.ListUtils;
 import org.slf4j.Logger;

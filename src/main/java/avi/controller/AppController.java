@@ -42,30 +42,26 @@ private AppHttpClient appHttpClient;
     @RequestMapping("/getUrls")
     @ResponseBody
     public AppResponse getUrls(@RequestParam(name = "url") String url) throws InterruptedException, ExecutionException {
-        AppResponse response = null;
-        if (StringUtils.isEmpty(url)) {
-            response = new AppResponse(500, "url is empty");
-        } else {
-            List<String> urlList = Arrays.asList(url.split("\\r?\\n"));
-            ;
-            response = new AppResponse(200, urlList);
-        }
-        return response;
+         if(StringUtils.isEmpty(url)) {
+            return new AppResponse(500,"url is empty");
+         }
+         List<String> urlList = Arrays.asList(url.split("\\r?\\n"));
+         return new AppResponse(200, urlList);
+
     }
 
 
     @RequestMapping("/refreshCache")
     @ResponseBody
     public AppResponse refreshCache(@RequestParam(name = "url") String url) throws InterruptedException, ExecutionException {
-        AppResponse response = null;
         if(StringUtils.isEmpty(url)) {
-            response = new AppResponse(500,"url is empty");
-        }else{
-           List<String> urlList = Arrays.asList(url.split("\\r?\\n"));
-            List<AppResponse> responses = appService.refreshCache(urlList);
-            response = new AppResponse(200,responses);
+            return new AppResponse(500,"url is empty");
         }
-     return response;
+
+       List<String> urlList = Arrays.asList(url.split("\\r?\\n"));
+       List<AppResponse> responses = appService.refreshCache(urlList);
+       AppResponse response = new AppResponse(200,responses);
+       return response;
 
     }
 
