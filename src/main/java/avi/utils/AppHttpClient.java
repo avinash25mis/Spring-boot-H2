@@ -1,8 +1,12 @@
 package avi.utils;
 
-import avi.dto.response.GenericResponse;
+import avi.configuration.AppLogger;
+import avi.dto.response.AppResponse;
+import avi.service.PartitionAndExecutionService;
 import org.apache.commons.collections4.MapUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -13,17 +17,17 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Clock;
 import java.time.Duration;
-import java.util.HashMap;
 import java.util.Map;
 
 
 @Component
 public class AppHttpClient {
 
-
+    Logger logger = LoggerFactory.getLogger(AppHttpClient.class);
     protected HttpClient httpClient;
+
+
 
     @PostConstruct
     public void getHttpClient(){
@@ -36,19 +40,14 @@ public class AppHttpClient {
 
 
 
-    HttpResponse<String> sendRequest(HttpRequest httpRequest) throws InterruptedException, IOException {
-        HttpResponse<String> response = null;
-            try {
-                response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            }catch (IOException e) {
-
-            }
-        return response;
-    }
 
 
-    public GenericResponse getCall(String targetUrl, Map<String, String> headers)  {
-        GenericResponse genericResponse= null;
+
+
+
+    public AppResponse makeGetCall(String targetUrl, Map<String, String> headers)  {
+        logger.error("calling targetUrl: "+targetUrl);
+        AppResponse appResponse = null;
         try {
             HttpRequest.Builder httpRequestBuilder = HttpRequest.newBuilder().GET().uri(URI.create(targetUrl.trim()))
                     .timeout(Duration.ofMillis(5000));
@@ -57,11 +56,17 @@ public class AppHttpClient {
             }
             HttpRequest httpRequest = httpRequestBuilder.build();
             HttpResponse<String> response = sendRequest(httpRequest);
-            genericResponse = new GenericResponse(response.statusCode(), response.body());
+            appResponse = new AppResponse(response.statusCode(),targetUrl,null, response.body());
         }catch (Exception e){
-           genericResponse = new GenericResponse(500, e.getMessage());
+           appResponse = new AppResponse(500,targetUrl,"exception", e.getMessage());
         }
-        return genericResponse;
+        return appResponse;
+    }
+
+
+    private HttpResponse<String> sendRequest(HttpRequest httpRequest) throws InterruptedException, IOException {
+        HttpResponse<String> response = response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        return response;
     }
 
 

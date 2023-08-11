@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE configuration>
-
 <configuration scan="true">
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
     <!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
-
-
-
 
     <appender name="application"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -27,20 +23,6 @@
             <pattern>%date{yyyy-MM-dd HH:mm:ss:SSS} | %-5level %class{36}.%M %L [%X{transactionId}] %message %n </pattern>
         </encoder>
     </appender>
-
-
-
-
-    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
-        <queueSize>512</queueSize>
-        <appender-ref ref="FILE"/>
-    </appender>
-
-    <root level="${logging.level.root}">
-        <appender-ref ref="ASYNC"/>
-    </root>
-
-
 
     <logger name="application_logger" level="info" additivity="false">
         <appender-ref ref="application" />

@@ -25,7 +25,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
     @Autowired
     private Environment env;
 
-
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage()));
+        return new ResponseEntity(errors,HttpStatus.BAD_REQUEST);
+    }
 
 
     @ExceptionHandler(AppExceptions.class)
@@ -36,19 +42,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
         ErrorResponse error = new ErrorResponse(errorMessage, details);
         return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
-
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
-        Map<String, String> errors = new HashMap<>();
-
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage()));
-        return new ResponseEntity(errors,HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> defaultHandler(Exception ex, WebRequest request) {
         String errorMessage=ex.getLocalizedMessage();
@@ -58,8 +51,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler
         }else{
             details=ex.getLocalizedMessage();
         }
-
-
         ex.printStackTrace();
         ErrorResponse error = new ErrorResponse(errorMessage, details);
         return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);

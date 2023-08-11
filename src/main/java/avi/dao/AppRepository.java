@@ -17,9 +17,9 @@ import java.util.*;
 
 @Repository
 @Transactional
-public class CommonRepository {
+public class AppRepository {
 
-    private static Logger logger = LoggerFactory.getLogger(CommonRepository.class);
+    private static Logger logger = LoggerFactory.getLogger(AppRepository.class);
     @Autowired
     private JpaContext jpaContext;
 
