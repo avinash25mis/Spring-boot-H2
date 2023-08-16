@@ -1,6 +1,7 @@
 package avi.utils;
 
 import avi.configuration.AppLogger;
+import avi.constants.ConfigConstant;
 import avi.dto.response.AppResponse;
 import avi.service.PartitionAndExecutionService;
 import org.apache.commons.collections4.MapUtils;
@@ -25,13 +26,12 @@ import java.util.Map;
 public class AppHttpClient {
     Logger logger = LoggerFactory.getLogger(AppHttpClient.class);
     private HttpClient httpClient;
-    private int connectTimeout=9000;
-    private int connectionRequestTimeout=9000;
+
 
     @PostConstruct
     public void getHttpClient(){
         HttpClient.Builder httpClientBuilder = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofMillis(connectTimeout));
+                .connectTimeout(Duration.ofMillis(ConfigConstant.connectTimeout));
         httpClientBuilder.version(HttpClient.Version.HTTP_2);
         httpClientBuilder.cookieHandler(new CookieManager(null, CookiePolicy.ACCEPT_NONE));
         httpClient = httpClientBuilder.build();
@@ -44,7 +44,7 @@ public class AppHttpClient {
         AppResponse appResponse = null;
         try {
             HttpRequest.Builder httpRequestBuilder = HttpRequest.newBuilder().GET().uri(URI.create(targetUrl.trim()))
-                    .timeout(Duration.ofMillis(connectionRequestTimeout));
+                    .timeout(Duration.ofMillis(ConfigConstant.connectionRequestTimeout));
             if (MapUtils.isNotEmpty(headers)) {
                 headers.forEach(httpRequestBuilder::setHeader);
             }

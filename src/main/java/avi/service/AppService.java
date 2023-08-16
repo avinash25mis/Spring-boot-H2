@@ -2,6 +2,7 @@ package avi.service;
 
 
 import avi.constants.AppConstants;
+import avi.constants.ConfigConstant;
 import avi.dto.response.AppResponse;
 import avi.utils.AppHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,17 +55,17 @@ public class AppService {
     public AppResponse callMultiple(String targetUrl) throws InterruptedException {
        int totalCalls = 0;
        boolean gotSuccess = false;
-        for(int i=1;i<4;i++){
+        for(int i = 1; i< ConfigConstant.numOfCall; i++){
             AppResponse appResponse = appHttpClient.makeGetCall(targetUrl, null,i);
             totalCalls = i;
             if(appResponse.getStatusCode() == 200) {
-                gotSuccess =false;
+                gotSuccess =true;
                  break;
              }else {
                 Thread.sleep(2000);
              }
         }
-        return new AppResponse(200,"totall Calls ="+totalCalls, targetUrl,"success="+gotSuccess);
+        return new AppResponse(200,"totall Calls ="+totalCalls, targetUrl,gotSuccess);
         }
 
     }

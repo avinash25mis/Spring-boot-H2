@@ -1,6 +1,7 @@
 package avi.configuration;
 
 
+import avi.constants.ConfigConstant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,10 +23,10 @@ public class ExecutorConfig {
    2.or if fewer than maxPoolSize threads are running
 
 * */
-    private int threadPoolSize=12;
     @Bean("fixedThreadPool")
     public ExecutorService fixedThreadPool() {
-        return new ThreadPoolExecutor(threadPoolSize, threadPoolSize, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+        Integer threadPoolSize = 12;
+        return new ThreadPoolExecutor(ConfigConstant.threadPoolSize, ConfigConstant.threadPoolSize, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
     }
 }
 
