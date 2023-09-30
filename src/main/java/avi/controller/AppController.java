@@ -7,8 +7,13 @@ import avi.dao.AppRepository;
 import avi.dto.UrlDetails;
 import avi.dto.response.AppResponse;
 import avi.service.AppService;
+import avi.service.PartitionAndExecutionService;
 import avi.utils.AppHttpClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +30,9 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping(value = {"/app","/",""})
 public  class AppController {
 
-@Autowired
+    Logger logger = LoggerFactory.getLogger(AppController.class);
+
+    @Autowired
 private AppRepository repository;
 
 @Autowired
@@ -45,6 +52,18 @@ private AppHttpClient appHttpClient;
         return "app";
     }
 
+    @GetMapping("/testCall")
+    public ResponseEntity<String> testCallGET() throws  Exception {
+        logger.error("testCall GET called");
+        return new ResponseEntity<String>("unauthorized", HttpStatus.NOT_FOUND);
+
+    }
+    @PostMapping("/testCall")
+    public ResponseEntity<String> testCallPOST() throws  Exception {
+        logger.error("testCall POST called");
+        return new ResponseEntity<String>("unauthorized", HttpStatus.NOT_FOUND);
+
+    }
 
     @RequestMapping("/getUrlList")
     @ResponseBody
@@ -57,6 +76,8 @@ private AppHttpClient appHttpClient;
          return new AppResponse(200,  getListFromString(urlList));
 
     }
+
+
 
 
 
