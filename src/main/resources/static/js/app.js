@@ -1,86 +1,77 @@
-   var hostName=window.location.origin+"/app";
+var hostName=window.location.origin+"/app";
   console.log(hostName);
 
-   function getUrlList(){
+ function makeHttpCall(url,type,data,e){
+  if(type==""|| type==null || type==undefined){
+   type="GET";
+  }
+  if(data==""|| data==null || data==undefined){
+    data={};
+   }
+   var response="";
+   const button = e.target
+   $.ajax({
+      url: hostName+"/"+url,
+      type: type,
+      data: data,
+      beforeSend: function () {
+      $(button).attr("disabled","disabled");
+      },
+      success: function (genericResponse) {
+       response=genericResponse;
+      },
+      error: function (jqXHR) {
+           alert(jqXHR.responseJSON.message);
 
-                $.ajax({
-                   url: hostName+"/getUrlList",
-                   type: "GET",
-                   data: $("#checkUrls").serialize(),
-           beforeSend: function () {
-           $("#checkUrlButton").attr("disabled","disabled");
-                         },
-         success: function (response) {
-           var unProcessedTable = $("#unProcessed");
-           unProcessedTable.empty();
-           var processedTable = $("#processed");
-           processedTable.empty();
-           var unProcessedArray = [];
-            if(response.result.length != 0  && typeof response.result =='object'){
-          	$.each(response.result, function(i, item) {
-                var tr = "<tr>" + "<td>" + item.url + "</td>" +"</tr>";
-          				unProcessedTable.append(tr);
-          				unProcessedArray.push(item.url);
-          	});
-             }
-             },
-         error: function (jqXHR) {
-          alert(jqXHR.responseJSON.message);
-
-         },
-         complete: function () {
-             $("#checkUrlButton").attr("disabled",false);
-
-        }
-});
-
+      },
+      complete: function () {
+     $(button).attr("disabled",false);
+      }
+ });
+ return response;
  }
 
 
 
-   function makeCallAndRefresh(){
+   function getUrlList(e){
+     var response = makeHttpCall("getUrlList","GET",$("#checkUrls").serialize(),e);
+     var unProcessedTable = $("#unProcessed");
+     unProcessedTable.empty();
+     var processedTable = $("#processed");
+     processedTable.empty();
+     var unProcessedArray = [];
+     if(response!="" && response.result.length != 0  && typeof response.result =='object'){
+     $.each(response.result, function(i, item) {
+       var tr = "<tr>" + "<td>" + item.url + "</td>" +"</tr>";
+     	unProcessedTable.append(tr);
+     	unProcessedArray.push(item.url);
+     	});
+     }
+ }
 
-                $.ajax({
-                   url: hostName+"/makeCallAndRefresh",
-                   type: "GET",
-                   data: $("#checkUrls").serialize(),
-           beforeSend: function () {
-        $("#refreshCacheButton").attr("disabled","disabled");
-                         },
-         success: function (response) {
-           var unProcessedTable = $("#unProcessed");
-           unProcessedTable.empty();
-           var processedTable = $("#processed");
-           processedTable.empty();
-           var unProcessedArray = [];
-           var processedArray = [];
-            if(response.result.length != 0  && typeof response.result =='object'){
-          	$.each(response.result, function(i, item) {
-          	  if(item.status==false){
-                var tr = "<tr>" + "<td>" + item.url + "</td>" +"</tr>";
-          				unProcessedTable.append(tr);
-          				unProcessedArray.push(item.url);
 
-          		}else{
-          		var tr = "<tr>" + "<td>" + item.url + "</td>" +"</tr>";
-                       processedTable.append(tr);
-                       processedArray.push(item.url);
-          		 }
+ function makeCallAndRefresh(e){
+ var response = makeHttpCall("makeCallAndRefresh","GET",$("#checkUrls").serialize(),e);
+  var unProcessedTable = $("#unProcessed");
+  unProcessedTable.empty();
+  var processedTable = $("#processed");
+  processedTable.empty();
+  var unProcessedArray = [];
+  var processedArray = [];
+  if(response!="" && response.result.length != 0  && typeof response.result =='object'){
 
-          	});
-
-          	}
-             },
-         error: function (jqXHR) {
-          alert(jqXHR.responseJSON.message);
-
-         },
-         complete: function () {
-         $("#refreshCacheButton").attr("disabled",false);
-
-        }
+  $.each(response.result, function(i, item) {
+  if(item.status==false){
+  var tr = "<tr>" + "<td>" + item.url + "</td>" +"</tr>";
+  unProcessedTable.append(tr);
+  unProcessedArray.push(item.url);
+ }else{
+ var tr = "<tr>" + "<td>" + item.url + "</td>" +"</tr>";
+    processedTable.append(tr);
+    processedArray.push(item.url);
+   }
 });
-
+	}
  }
 
 
@@ -91,11 +82,11 @@
       });
 
       $("#checkUrlButton").on("click", function (e) {
-          getUrlList();
+          getUrlList(e);
       });
 
       $("#refreshCacheButton").on("click", function (e) {
-          makeCallAndRefresh();
+          makeCallAndRefresh(e);
       });
 
      });
